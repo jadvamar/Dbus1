@@ -12,7 +12,6 @@ class DbusInterface : public QObject
 
 public:
     explicit DbusInterface(QObject *parent = nullptr);
-
     Q_INVOKABLE void sendMessageToApp2(const QString &message);
 
 signals:

@@ -3,12 +3,19 @@
 
 DbusInterface::DbusInterface(QObject *parent) : QObject(parent)
 {
-    QDBusConnection::sessionBus().registerService("org.example.MessageService1");
-    QDBusConnection::sessionBus().registerObject(
-        "/org/example/MessageService1",
-        this,
-        QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals
-        );
+    if (QDBusConnection::sessionBus().isConnected()) {
+        qDebug() << "Successfully connected to the D-Bus session bus.";
+        QDBusConnection::sessionBus().registerService("org.example.MessageService1");
+        QDBusConnection::sessionBus().registerObject(
+            "/org/example/MessageService1",
+            this,
+            QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals
+            );
+    }
+    else{
+        qDebug() << "Failed to connect to the D-Bus session bus:"
+                 << QDBusConnection::sessionBus().lastError().message();
+    }
 }
 
 void DbusInterface::sendMessageToApp2(const QString &message)
